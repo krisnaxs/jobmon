@@ -178,17 +178,17 @@
                     flex flex-wrap items-center justify-between gap-3">
 
             @if ($isAdmin)
-                <div class="flex gap-1">
+                <div class="flex gap-1 overflow-x-auto pb-1 md:pb-0 w-full md:w-auto custom-scrollbar">
                     <button onclick="setDivisionFilter('all')" data-divfilter="all"
-                        class="divfilter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 text-white transition">
+                        class="divfilter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 text-white transition whitespace-nowrap">
                         Semua
                     </button>
                     <button onclick="setDivisionFilter('cctv')" data-divfilter="cctv"
-                        class="divfilter-btn px-3 py-1.5 rounded-lg text-xs font-semibold text-purple-700 hover:bg-purple-50 border border-purple-200 transition">
+                        class="divfilter-btn px-3 py-1.5 rounded-lg text-xs font-semibold text-purple-700 hover:bg-purple-50 border border-purple-200 transition whitespace-nowrap">
                         📹 CCTV
                     </button>
                     <button onclick="setDivisionFilter('helpdesk')" data-divfilter="helpdesk"
-                        class="divfilter-btn px-3 py-1.5 rounded-lg text-xs font-semibold text-teal-700 hover:bg-teal-50 border border-teal-200 transition">
+                        class="divfilter-btn px-3 py-1.5 rounded-lg text-xs font-semibold text-teal-700 hover:bg-teal-50 border border-teal-200 transition whitespace-nowrap">
                         🎧 Helpdesk
                     </button>
                 </div>
@@ -342,7 +342,7 @@
                         </button>
                     </div>
                 </div>
-                <div class="overflow-x-auto">
+                <div class="overflow-x-auto custom-scrollbar">
                     <table class="w-full text-sm">
                         <thead class="bg-gray-50 text-xs uppercase text-gray-500">
                             <tr>
@@ -404,112 +404,146 @@
                 </div>
             </div>
 
-            <div id="woMainGrid"
-                class="p-3 grid gap-3 {{ $isAdmin ? 'grid-cols-2 md:grid-cols-3 lg:grid-cols-6' : 'grid-cols-1 md:grid-cols-3' }}">
+            {{-- BUNGKUS DENGAN OVERFLOW-X-AUTO UNTUK MOBILE --}}
+            <div class="w-full overflow-x-auto pb-2 custom-scrollbar">
+                {{-- 6 KOLOM GRID KAKU (Hanya aktif di Desktop) --}}
+                <div id="woMainGrid"
+                    class="p-3 grid gap-3 min-w-[1200px] {{ $isAdmin ? 'grid-cols-6' : 'grid-cols-3' }}">
 
-                @if ($isAdmin || $division === 'cctv')
-                    <div id="cctv-group" class="contents">
-                        <div class="flex flex-col bg-gray-50/60 border border-gray-100 rounded-xl overflow-hidden">
-                            <div
-                                class="shrink-0 px-3 py-2 border-b border-gray-100 flex justify-between items-center bg-purple-50">
-                                <h3
-                                    class="text-[10px] uppercase tracking-wider text-purple-700 font-bold flex items-center gap-1.5">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
-                                    CCTV · Pending
-                                </h3>
-                                <span class="text-[10px] text-gray-500 font-mono" id="countCctvPending">—</span>
+                    @if ($isAdmin || $division === 'cctv')
+                        <div id="cctv-group" class="contents">
+                            <div class="flex flex-col bg-gray-50/60 border border-gray-100 rounded-xl overflow-hidden">
+                                <div
+                                    class="shrink-0 px-3 py-2 border-b border-gray-100 flex justify-between items-center bg-purple-50">
+                                    <h3
+                                        class="text-[10px] uppercase tracking-wider text-purple-700 font-bold flex items-center gap-1.5">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+                                        CCTV · Pending
+                                    </h3>
+                                    <span class="text-[10px] text-gray-500 font-mono" id="countCctvPending">—</span>
+                                </div>
+                                <div id="gridCctvPending"
+                                    class="flex-1 max-h-96 overflow-y-auto p-2 space-y-1.5 custom-scrollbar">
+                                    <div class="text-center py-4 text-gray-400 text-[10px]">Memuat...</div>
+                                </div>
                             </div>
-                            <div id="gridCctvPending" class="flex-1 max-h-96 overflow-y-auto p-2 space-y-1.5">
-                                <div class="text-center py-4 text-gray-400 text-[10px]">Memuat...</div>
+
+                            <div class="flex flex-col bg-gray-50/60 border border-gray-100 rounded-xl overflow-hidden">
+                                <div
+                                    class="shrink-0 px-3 py-2 border-b border-gray-100 flex justify-between items-center bg-purple-50">
+                                    <h3
+                                        class="text-[10px] uppercase tracking-wider text-purple-700 font-bold flex items-center gap-1.5">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                                        CCTV · Proses
+                                    </h3>
+                                    <span class="text-[10px] text-gray-500 font-mono" id="countCctvProgress">—</span>
+                                </div>
+                                <div id="gridCctvProgress"
+                                    class="flex-1 max-h-96 overflow-y-auto p-2 space-y-1.5 custom-scrollbar">
+                                    <div class="text-center py-4 text-gray-400 text-[10px]">Memuat...</div>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-col bg-gray-50/60 border border-gray-100 rounded-xl overflow-hidden">
+                                <div
+                                    class="shrink-0 px-3 py-2 border-b border-gray-100 flex justify-between items-center bg-purple-50">
+                                    <h3
+                                        class="text-[10px] uppercase tracking-wider text-purple-700 font-bold flex items-center gap-1.5">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                                        CCTV · Selesai
+                                    </h3>
+                                    <span class="text-[10px] text-gray-500 font-mono" id="countCctvCompleted">—</span>
+                                </div>
+                                <div id="gridCctvCompleted"
+                                    class="flex-1 max-h-96 overflow-y-auto p-2 space-y-1.5 custom-scrollbar">
+                                    <div class="text-center py-4 text-gray-400 text-[10px]">Memuat...</div>
+                                </div>
                             </div>
                         </div>
+                    @endif
 
-                        <div class="flex flex-col bg-gray-50/60 border border-gray-100 rounded-xl overflow-hidden">
-                            <div
-                                class="shrink-0 px-3 py-2 border-b border-gray-100 flex justify-between items-center bg-purple-50">
-                                <h3
-                                    class="text-[10px] uppercase tracking-wider text-purple-700 font-bold flex items-center gap-1.5">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
-                                    CCTV · Proses
-                                </h3>
-                                <span class="text-[10px] text-gray-500 font-mono" id="countCctvProgress">—</span>
+                    @if ($isAdmin || $division === 'helpdesk')
+                        <div id="helpdesk-group" class="contents">
+                            <div class="flex flex-col bg-gray-50/60 border border-gray-100 rounded-xl overflow-hidden">
+                                <div
+                                    class="shrink-0 px-3 py-2 border-b border-gray-100 flex justify-between items-center bg-teal-50">
+                                    <h3
+                                        class="text-[10px] uppercase tracking-wider text-teal-700 font-bold flex items-center gap-1.5">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+                                        Helpdesk · Pending
+                                    </h3>
+                                    <span class="text-[10px] text-gray-500 font-mono" id="countHdPending">—</span>
+                                </div>
+                                <div id="gridHdPending"
+                                    class="flex-1 max-h-96 overflow-y-auto p-2 space-y-1.5 custom-scrollbar">
+                                    <div class="text-center py-4 text-gray-400 text-[10px]">Memuat...</div>
+                                </div>
                             </div>
-                            <div id="gridCctvProgress" class="flex-1 max-h-96 overflow-y-auto p-2 space-y-1.5">
-                                <div class="text-center py-4 text-gray-400 text-[10px]">Memuat...</div>
+
+                            <div class="flex flex-col bg-gray-50/60 border border-gray-100 rounded-xl overflow-hidden">
+                                <div
+                                    class="shrink-0 px-3 py-2 border-b border-gray-100 flex justify-between items-center bg-teal-50">
+                                    <h3
+                                        class="text-[10px] uppercase tracking-wider text-teal-700 font-bold flex items-center gap-1.5">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                                        Helpdesk · Proses
+                                    </h3>
+                                    <span class="text-[10px] text-gray-500 font-mono" id="countHdProgress">—</span>
+                                </div>
+                                <div id="gridHdProgress"
+                                    class="flex-1 max-h-96 overflow-y-auto p-2 space-y-1.5 custom-scrollbar">
+                                    <div class="text-center py-4 text-gray-400 text-[10px]">Memuat...</div>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-col bg-gray-50/60 border border-gray-100 rounded-xl overflow-hidden">
+                                <div
+                                    class="shrink-0 px-3 py-2 border-b border-gray-100 flex justify-between items-center bg-teal-50">
+                                    <h3
+                                        class="text-[10px] uppercase tracking-wider text-teal-700 font-bold flex items-center gap-1.5">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                                        Helpdesk · Selesai
+                                    </h3>
+                                    <span class="text-[10px] text-gray-500 font-mono" id="countHdCompleted">—</span>
+                                </div>
+                                <div id="gridHdCompleted"
+                                    class="flex-1 max-h-96 overflow-y-auto p-2 space-y-1.5 custom-scrollbar">
+                                    <div class="text-center py-4 text-gray-400 text-[10px]">Memuat...</div>
+                                </div>
                             </div>
                         </div>
-
-                        <div class="flex flex-col bg-gray-50/60 border border-gray-100 rounded-xl overflow-hidden">
-                            <div
-                                class="shrink-0 px-3 py-2 border-b border-gray-100 flex justify-between items-center bg-purple-50">
-                                <h3
-                                    class="text-[10px] uppercase tracking-wider text-purple-700 font-bold flex items-center gap-1.5">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                                    CCTV · Selesai
-                                </h3>
-                                <span class="text-[10px] text-gray-500 font-mono" id="countCctvCompleted">—</span>
-                            </div>
-                            <div id="gridCctvCompleted" class="flex-1 max-h-96 overflow-y-auto p-2 space-y-1.5">
-                                <div class="text-center py-4 text-gray-400 text-[10px]">Memuat...</div>
-                            </div>
-                        </div>
-                    </div>
-                @endif
-
-                @if ($isAdmin || $division === 'helpdesk')
-                    <div id="helpdesk-group" class="contents">
-                        <div class="flex flex-col bg-gray-50/60 border border-gray-100 rounded-xl overflow-hidden">
-                            <div
-                                class="shrink-0 px-3 py-2 border-b border-gray-100 flex justify-between items-center bg-teal-50">
-                                <h3
-                                    class="text-[10px] uppercase tracking-wider text-teal-700 font-bold flex items-center gap-1.5">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
-                                    Helpdesk · Pending
-                                </h3>
-                                <span class="text-[10px] text-gray-500 font-mono" id="countHdPending">—</span>
-                            </div>
-                            <div id="gridHdPending" class="flex-1 max-h-96 overflow-y-auto p-2 space-y-1.5">
-                                <div class="text-center py-4 text-gray-400 text-[10px]">Memuat...</div>
-                            </div>
-                        </div>
-
-                        <div class="flex flex-col bg-gray-50/60 border border-gray-100 rounded-xl overflow-hidden">
-                            <div
-                                class="shrink-0 px-3 py-2 border-b border-gray-100 flex justify-between items-center bg-teal-50">
-                                <h3
-                                    class="text-[10px] uppercase tracking-wider text-teal-700 font-bold flex items-center gap-1.5">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
-                                    Helpdesk · Proses
-                                </h3>
-                                <span class="text-[10px] text-gray-500 font-mono" id="countHdProgress">—</span>
-                            </div>
-                            <div id="gridHdProgress" class="flex-1 max-h-96 overflow-y-auto p-2 space-y-1.5">
-                                <div class="text-center py-4 text-gray-400 text-[10px]">Memuat...</div>
-                            </div>
-                        </div>
-
-                        <div class="flex flex-col bg-gray-50/60 border border-gray-100 rounded-xl overflow-hidden">
-                            <div
-                                class="shrink-0 px-3 py-2 border-b border-gray-100 flex justify-between items-center bg-teal-50">
-                                <h3
-                                    class="text-[10px] uppercase tracking-wider text-teal-700 font-bold flex items-center gap-1.5">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                                    Helpdesk · Selesai
-                                </h3>
-                                <span class="text-[10px] text-gray-500 font-mono" id="countHdCompleted">—</span>
-                            </div>
-                            <div id="gridHdCompleted" class="flex-1 max-h-96 overflow-y-auto p-2 space-y-1.5">
-                                <div class="text-center py-4 text-gray-400 text-[10px]">Memuat...</div>
-                            </div>
-                        </div>
-                    </div>
-                @endif
+                    @endif
+                </div>
             </div>
         </div>
 
     </div>
 
 @endsection
+
+@push('styles')
+    <style>
+        /* Custom Scrollbar untuk area Work Order di mobile */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 8px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 4px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+@endpush
 
 @push('scripts')
     <script>
@@ -653,14 +687,17 @@
                 cctvGroup.style.display = 'contents';
                 hdGroup.style.display = 'none';
                 mainGrid.style.gridTemplateColumns = 'repeat(3, minmax(0, 1fr))';
+                mainGrid.style.minWidth = '600px'; // Menjaga lebar di mobile
             } else if (currentDivisionFilter === 'helpdesk') {
                 cctvGroup.style.display = 'none';
                 hdGroup.style.display = 'contents';
                 mainGrid.style.gridTemplateColumns = 'repeat(3, minmax(0, 1fr))';
+                mainGrid.style.minWidth = '600px'; // Menjaga lebar di mobile
             } else {
                 cctvGroup.style.display = 'contents';
                 hdGroup.style.display = 'contents';
                 mainGrid.style.gridTemplateColumns = 'repeat(6, minmax(0, 1fr))';
+                mainGrid.style.minWidth = '1200px'; // Menjaga lebar di mobile
             }
         }
 
@@ -964,18 +1001,18 @@
                         </div>
 
                         ${hasSkip ? `
-                                                            <div class="bg-white rounded-xl shadow-sm border border-rose-100 p-4 hover:shadow-md transition">
-                                                                <div class="flex items-center justify-between">
-                                                                    <div class="text-[10px] text-rose-500 uppercase tracking-wide font-semibold">Skip</div>
-                                                                    <div class="w-7 h-7 rounded-lg bg-rose-50 flex items-center justify-center">
-                                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-rose-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
-                                                                        </svg>
+                                                                <div class="bg-white rounded-xl shadow-sm border border-rose-100 p-4 hover:shadow-md transition">
+                                                                    <div class="flex items-center justify-between">
+                                                                        <div class="text-[10px] text-rose-500 uppercase tracking-wide font-semibold">Skip</div>
+                                                                        <div class="w-7 h-7 rounded-lg bg-rose-50 flex items-center justify-center">
+                                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-rose-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                                                <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                                                                            </svg>
+                                                                        </div>
                                                                     </div>
+                                                                    <div class="text-2xl font-bold text-rose-600 mt-2">${d.no_participation}</div>
                                                                 </div>
-                                                                <div class="text-2xl font-bold text-rose-600 mt-2">${d.no_participation}</div>
-                                                            </div>
-                                                        ` : ''}
+                                                            ` : ''}
                     `;
                 }
             } catch (err) {
@@ -1392,16 +1429,16 @@
 
                     {{--  BARU: Tanggal dibuat --}}
                     ${createdAt ? `
-                                    <div class="flex items-center gap-1 text-[9px] text-gray-400 mb-1.5"
-                                         title="Dibuat: ${createdFull}">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-2.5 w-2.5 shrink-0" fill="none"
-                                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                        </svg>
-                                        <span>${createdAt}</span>
-                                    </div>
-                                ` : ''}
+                                        <div class="flex items-center gap-1 text-[9px] text-gray-400 mb-1.5"
+                                             title="Dibuat: ${createdFull}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-2.5 w-2.5 shrink-0" fill="none"
+                                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>${createdAt}</span>
+                                        </div>
+                                    ` : ''}
 
                     <div class="flex items-center justify-between gap-2 text-[9px] text-gray-400 flex-wrap">
                         <div class="flex items-center gap-1">
@@ -1415,29 +1452,29 @@
 
                     {{--  BARU: Deadline dengan warning --}}
                     ${deadlineStr ? `
-                                    <div class="mt-1 flex items-center gap-1 text-[9px] font-semibold
-                                                ${isOverdue
-                                                    ? 'text-red-600'
-                                                    : isNearDeadline
-                                                        ? 'text-amber-600'
-                                                        : 'text-gray-400'}">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-2.5 w-2.5 shrink-0" fill="none"
-                                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                                        </svg>
-                                        <span>
-                                            ${isOverdue ? '⚠️ Overdue: ' : isNearDeadline ? '⏰ Deadline: ' : '📅 '}
-                                            ${deadlineStr}
-                                        </span>
-                                    </div>
-                                ` : ''}
+                                        <div class="mt-1 flex items-center gap-1 text-[9px] font-semibold
+                                                    ${isOverdue
+                                                        ? 'text-red-600'
+                                                        : isNearDeadline
+                                                            ? 'text-amber-600'
+                                                            : 'text-gray-400'}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-2.5 w-2.5 shrink-0" fill="none"
+                                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                            </svg>
+                                            <span>
+                                                ${isOverdue ? '⚠️ Overdue: ' : isNearDeadline ? '⏰ Deadline: ' : '📅 '}
+                                                ${deadlineStr}
+                                            </span>
+                                        </div>
+                                    ` : ''}
 
                     ${(w.building || w.location) ? `
-                                    <div class="text-[9px] text-gray-400 mt-1 truncate">
-                                        📍 ${w.building ? w.building + ' — ' : ''}${w.location || ''}
-                                    </div>
-                                ` : ''}
+                                        <div class="text-[9px] text-gray-400 mt-1 truncate">
+                                            📍 ${w.building ? w.building + ' — ' : ''}${w.location || ''}
+                                        </div>
+                                    ` : ''}
                 </a>
             `;
         }

@@ -73,6 +73,7 @@
 
         .thin-scroll::-webkit-scrollbar {
             width: 6px;
+            height: 6px;
         }
 
         .thin-scroll::-webkit-scrollbar-track {
@@ -106,11 +107,12 @@
     </style>
 </head>
 
-<body class="bg-slate-950 h-screen text-slate-100 antialiased overflow-hidden flex flex-col">
+<body
+    class="bg-slate-950 min-h-screen text-slate-100 antialiased flex flex-col overflow-x-hidden md:h-screen md:overflow-hidden">
 
     {{-- ==================== HEADER ==================== --}}
     <header
-        class="shrink-0 px-6 py-3 flex justify-between items-center border-b border-slate-800/60 bg-slate-900/40 backdrop-blur-sm">
+        class="shrink-0 px-4 py-3 md:px-6 flex flex-wrap justify-between items-center border-b border-slate-800/60 bg-slate-900/40 backdrop-blur-sm gap-3">
         <div class="flex items-center gap-3">
             <img src="{{ asset('favicon.png') }}?v=1" alt="Job Monitor" class="w-10 h-10 rounded-xl object-contain">
 
@@ -125,45 +127,45 @@
             </div>
         </div>
 
-        <div class="flex items-center gap-4">
+        <div class="flex items-center gap-4 flex-wrap">
             {{-- FILTER DIVISI --}}
-            <div class="flex gap-1">
+            <div class="flex gap-1 overflow-x-auto thin-scroll pb-1 md:pb-0 w-full md:w-auto">
                 <button onclick="setDivisionFilter('all')" data-divfilter="all"
-                    class="divfilter-btn px-3 py-1.5 rounded-lg text-[11px] font-semibold bg-slate-600 text-white transition">
+                    class="divfilter-btn px-3 py-1.5 rounded-lg text-[11px] font-semibold bg-slate-600 text-white transition whitespace-nowrap">
                     Semua
                 </button>
                 <button onclick="setDivisionFilter('cctv')" data-divfilter="cctv"
-                    class="divfilter-btn px-3 py-1.5 rounded-lg text-[11px] font-semibold text-purple-300 hover:bg-purple-500/20 border border-purple-500/40 transition">
+                    class="divfilter-btn px-3 py-1.5 rounded-lg text-[11px] font-semibold text-purple-300 hover:bg-purple-500/20 border border-purple-500/40 transition whitespace-nowrap">
                     📹 CCTV
                 </button>
                 <button onclick="setDivisionFilter('helpdesk')" data-divfilter="helpdesk"
-                    class="divfilter-btn px-3 py-1.5 rounded-lg text-[11px] font-semibold text-teal-300 hover:bg-teal-500/20 border border-teal-500/40 transition">
+                    class="divfilter-btn px-3 py-1.5 rounded-lg text-[11px] font-semibold text-teal-300 hover:bg-teal-500/20 border border-teal-500/40 transition whitespace-nowrap">
                     🎧 Helpdesk
                 </button>
             </div>
 
             {{-- FILTER RANGE WAKTU --}}
-            <div class="flex gap-1 items-center">
+            <div class="flex gap-1 items-center overflow-x-auto thin-scroll pb-1 md:pb-0 w-full md:w-auto">
                 <button onclick="setRangePreset('today')" data-range="today"
-                    class="range-btn px-3 py-1.5 rounded-lg text-[11px] font-semibold bg-indigo-500 text-white transition">
+                    class="range-btn px-3 py-1.5 rounded-lg text-[11px] font-semibold bg-indigo-500 text-white transition whitespace-nowrap">
                     Hari Ini
                 </button>
                 <button onclick="setRangePreset('week')" data-range="week"
-                    class="range-btn px-3 py-1.5 rounded-lg text-[11px] font-semibold text-slate-300 hover:bg-slate-700/60 border border-slate-600 transition">
+                    class="range-btn px-3 py-1.5 rounded-lg text-[11px] font-semibold text-slate-300 hover:bg-slate-700/60 border border-slate-600 transition whitespace-nowrap">
                     7 Hari
                 </button>
                 <button onclick="setRangePreset('month')" data-range="month"
-                    class="range-btn px-3 py-1.5 rounded-lg text-[11px] font-semibold text-slate-300 hover:bg-slate-700/60 border border-slate-600 transition">
+                    class="range-btn px-3 py-1.5 rounded-lg text-[11px] font-semibold text-slate-300 hover:bg-slate-700/60 border border-slate-600 transition whitespace-nowrap">
                     30 Hari
                 </button>
                 <button onclick="setRangePreset('all')" data-range="all"
-                    class="range-btn px-3 py-1.5 rounded-lg text-[11px] font-semibold text-slate-300 hover:bg-slate-700/60 border border-slate-600 transition">
+                    class="range-btn px-3 py-1.5 rounded-lg text-[11px] font-semibold text-slate-300 hover:bg-slate-700/60 border border-slate-600 transition whitespace-nowrap">
                     Semua
                 </button>
 
                 <div class="relative" id="customRangeWrapper">
                     <button onclick="toggleCustomPicker(event)"
-                        class="range-btn px-3 py-1.5 rounded-lg text-[11px] font-semibold text-slate-300 hover:bg-slate-700/60 border border-slate-600 transition flex items-center gap-1">
+                        class="range-btn px-3 py-1.5 rounded-lg text-[11px] font-semibold text-slate-300 hover:bg-slate-700/60 border border-slate-600 transition flex items-center gap-1 whitespace-nowrap">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -216,7 +218,7 @@
                 </div>
             </div>
 
-            <div class="text-right">
+            <div class="text-right hidden md:block">
                 <div class="text-xl font-light text-white tabular-nums tracking-wide leading-tight" id="clock">
                     --:--:--</div>
                 <div class="text-[10px] text-slate-500" id="date">Memuat...</div>
@@ -256,220 +258,239 @@
         </div>
     </header>
 
-    {{-- ==================== STATS BAR ==================== --}}
-    <section class="shrink-0 px-6 py-3 grid grid-cols-6 gap-2" id="statsBar">
-        @for ($i = 0; $i < 6; $i++)
-            <div class="h-14 rounded-xl bg-slate-900/40 border border-slate-800/60 animate-pulse"></div>
-        @endfor
-    </section>
+    {{-- AREA SCROLL UNTUK KONTEN (Stats & Rekap) --}}
+    <div class="flex-1 overflow-y-auto md:overflow-hidden flex flex-col">
 
-    {{-- ==================== REKAP PER TEKNISI ==================== --}}
-    <section class="shrink-0 px-6 pb-3">
-        <div class="grid grid-cols-2 gap-3">
+        {{-- ==================== STATS BAR ==================== --}}
+        <section class="shrink-0 px-4 md:px-6 py-3 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2"
+            id="statsBar">
+            @for ($i = 0; $i < 6; $i++)
+                <div class="h-14 rounded-xl bg-slate-900/40 border border-slate-800/60 animate-pulse"></div>
+            @endfor
+        </section>
 
-            <div id="techCardCctv" class="bg-slate-900/40 border border-slate-800/60 rounded-2xl overflow-hidden">
-                <div class="flex justify-between items-center px-4 py-2 border-b border-slate-800/60 bg-purple-500/5">
-                    <h2
-                        class="text-[11px] uppercase tracking-widest text-purple-300 font-bold flex items-center gap-2">
-                        <span>📹</span>
-                        Rekap Teknisi CCTV
-                    </h2>
-                    <div class="text-[10px] text-slate-500 font-mono" id="techCountCctv">—</div>
+        {{-- ==================== REKAP PER TEKNISI ==================== --}}
+        <section class="shrink-0 px-4 md:px-6 pb-3">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
+
+                <div id="techCardCctv" class="bg-slate-900/40 border border-slate-800/60 rounded-2xl overflow-hidden">
+                    <div
+                        class="flex justify-between items-center px-4 py-2 border-b border-slate-800/60 bg-purple-500/5">
+                        <h2
+                            class="text-[11px] uppercase tracking-widest text-purple-300 font-bold flex items-center gap-2">
+                            <span>📹</span>
+                            Rekap Teknisi CCTV
+                        </h2>
+                        <div class="text-[10px] text-slate-500 font-mono" id="techCountCctv">—</div>
+                    </div>
+
+                    <div class="max-h-56 overflow-y-auto thin-scroll">
+                        <table class="w-full text-xs">
+                            <thead class="bg-slate-950/40 text-slate-500 sticky top-0 z-10">
+                                <tr>
+                                    <th
+                                        class="px-2.5 py-1.5 text-left font-semibold uppercase tracking-wider text-[9px] w-6">
+                                        #</th>
+                                    <th
+                                        class="px-2.5 py-1.5 text-left font-semibold uppercase tracking-wider text-[9px]">
+                                        Nama</th>
+                                    <th
+                                        class="px-2.5 py-1.5 text-center font-semibold uppercase tracking-wider text-[9px] w-10">
+                                        Total</th>
+                                    <th
+                                        class="px-2.5 py-1.5 text-center font-semibold uppercase tracking-wider text-[9px] w-12">
+                                        ✓</th>
+                                    <th
+                                        class="px-2.5 py-1.5 text-center font-semibold uppercase tracking-wider text-[9px] w-12">
+                                        ⚙</th>
+                                    <th
+                                        class="px-2.5 py-1.5 text-center font-semibold uppercase tracking-wider text-[9px] w-10 text-rose-400">
+                                        ⊘</th>
+                                    <th
+                                        class="px-2.5 py-1.5 text-left font-semibold uppercase tracking-wider text-[9px] w-32">
+                                        Progress</th>
+                                </tr>
+                            </thead>
+                            <tbody id="techTableCctv" class="divide-y divide-slate-800/60">
+                                <tr>
+                                    <td colspan="7" class="px-2.5 py-3 text-center text-slate-600 text-[10px]">
+                                        Memuat...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
 
-                <div class="max-h-56 overflow-y-auto thin-scroll">
-                    <table class="w-full text-xs">
-                        <thead class="bg-slate-950/40 text-slate-500 sticky top-0 z-10">
-                            <tr>
-                                <th
-                                    class="px-2.5 py-1.5 text-left font-semibold uppercase tracking-wider text-[9px] w-6">
-                                    #</th>
-                                <th class="px-2.5 py-1.5 text-left font-semibold uppercase tracking-wider text-[9px]">
-                                    Nama</th>
-                                <th
-                                    class="px-2.5 py-1.5 text-center font-semibold uppercase tracking-wider text-[9px] w-10">
-                                    Total</th>
-                                <th
-                                    class="px-2.5 py-1.5 text-center font-semibold uppercase tracking-wider text-[9px] w-12">
-                                    ✓</th>
-                                <th
-                                    class="px-2.5 py-1.5 text-center font-semibold uppercase tracking-wider text-[9px] w-12">
-                                    ⚙</th>
-                                <th
-                                    class="px-2.5 py-1.5 text-center font-semibold uppercase tracking-wider text-[9px] w-10 text-rose-400">
-                                    ⊘</th>
-                                <th
-                                    class="px-2.5 py-1.5 text-left font-semibold uppercase tracking-wider text-[9px] w-32">
-                                    Progress</th>
-                            </tr>
-                        </thead>
-                        <tbody id="techTableCctv" class="divide-y divide-slate-800/60">
-                            <tr>
-                                <td colspan="7" class="px-2.5 py-3 text-center text-slate-600 text-[10px]">
-                                    Memuat...</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div id="techCardHd" class="bg-slate-900/40 border border-slate-800/60 rounded-2xl overflow-hidden">
+                    <div
+                        class="flex justify-between items-center px-4 py-2 border-b border-slate-800/60 bg-teal-500/5">
+                        <h2
+                            class="text-[11px] uppercase tracking-widest text-teal-300 font-bold flex items-center gap-2">
+                            <span>🎧</span>
+                            Rekap Teknisi Helpdesk
+                        </h2>
+                        <div class="text-[10px] text-slate-500 font-mono" id="techCountHd">—</div>
+                    </div>
+
+                    <div class="max-h-56 overflow-y-auto thin-scroll">
+                        <table class="w-full text-xs">
+                            <thead class="bg-slate-950/40 text-slate-500 sticky top-0 z-10">
+                                <tr>
+                                    <th
+                                        class="px-2.5 py-1.5 text-left font-semibold uppercase tracking-wider text-[9px] w-6">
+                                        #</th>
+                                    <th
+                                        class="px-2.5 py-1.5 text-left font-semibold uppercase tracking-wider text-[9px]">
+                                        Nama</th>
+                                    <th
+                                        class="px-2.5 py-1.5 text-center font-semibold uppercase tracking-wider text-[9px] w-10">
+                                        Total</th>
+                                    <th
+                                        class="px-2.5 py-1.5 text-center font-semibold uppercase tracking-wider text-[9px] w-12">
+                                        ✓</th>
+                                    <th
+                                        class="px-2.5 py-1.5 text-center font-semibold uppercase tracking-wider text-[9px] w-12">
+                                        ⚙</th>
+                                    <th
+                                        class="px-2.5 py-1.5 text-center font-semibold uppercase tracking-wider text-[9px] w-10 text-rose-400">
+                                        ⊘</th>
+                                    <th
+                                        class="px-2.5 py-1.5 text-left font-semibold uppercase tracking-wider text-[9px] w-32">
+                                        Progress</th>
+                                </tr>
+                            </thead>
+                            <tbody id="techTableHd" class="divide-y divide-slate-800/60">
+                                <tr>
+                                    <td colspan="7" class="px-2.5 py-3 text-center text-slate-600 text-[10px]">
+                                        Memuat...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
+        </section>
 
-            <div id="techCardHd" class="bg-slate-900/40 border border-slate-800/60 rounded-2xl overflow-hidden">
-                <div class="flex justify-between items-center px-4 py-2 border-b border-slate-800/60 bg-teal-500/5">
-                    <h2 class="text-[11px] uppercase tracking-widest text-teal-300 font-bold flex items-center gap-2">
-                        <span>🎧</span>
-                        Rekap Teknisi Helpdesk
-                    </h2>
-                    <div class="text-[10px] text-slate-500 font-mono" id="techCountHd">—</div>
-                </div>
+        {{-- ==================== MAIN: GRID 6 KOLOM ==================== --}}
+        <main class="flex-1 md:min-h-0 px-4 md:px-6 pb-3 md:overflow-hidden">
 
-                <div class="max-h-56 overflow-y-auto thin-scroll">
-                    <table class="w-full text-xs">
-                        <thead class="bg-slate-950/40 text-slate-500 sticky top-0 z-10">
-                            <tr>
-                                <th
-                                    class="px-2.5 py-1.5 text-left font-semibold uppercase tracking-wider text-[9px] w-6">
-                                    #</th>
-                                <th class="px-2.5 py-1.5 text-left font-semibold uppercase tracking-wider text-[9px]">
-                                    Nama</th>
-                                <th
-                                    class="px-2.5 py-1.5 text-center font-semibold uppercase tracking-wider text-[9px] w-10">
-                                    Total</th>
-                                <th
-                                    class="px-2.5 py-1.5 text-center font-semibold uppercase tracking-wider text-[9px] w-12">
-                                    ✓</th>
-                                <th
-                                    class="px-2.5 py-1.5 text-center font-semibold uppercase tracking-wider text-[9px] w-12">
-                                    ⚙</th>
-                                <th
-                                    class="px-2.5 py-1.5 text-center font-semibold uppercase tracking-wider text-[9px] w-10 text-rose-400">
-                                    ⊘</th>
-                                <th
-                                    class="px-2.5 py-1.5 text-left font-semibold uppercase tracking-wider text-[9px] w-32">
-                                    Progress</th>
-                            </tr>
-                        </thead>
-                        <tbody id="techTableHd" class="divide-y divide-slate-800/60">
-                            <tr>
-                                <td colspan="7" class="px-2.5 py-3 text-center text-slate-600 text-[10px]">
-                                    Memuat...</td>
-                            </tr>
-                        </tbody>
-                    </table>
+            {{-- BUNGKUS DENGAN OVERFLOW-X-AUTO UNTUK MOBILE --}}
+            <div class="w-full md:h-full overflow-x-auto thin-scroll pb-2 md:pb-0">
+                <div id="mainGrid" class="h-full grid gap-3 min-w-[1200px]"
+                    style="grid-template-columns: repeat(6, minmax(0, 1fr));">
+
+                    <section id="cctv-group" class="contents">
+                        <div
+                            class="flex flex-col min-h-[400px] md:min-h-0 bg-slate-900/30 border border-slate-800/60 rounded-2xl overflow-hidden">
+                            <div
+                                class="shrink-0 px-3 py-2 border-b border-slate-800/60 flex justify-between items-center bg-purple-500/5">
+                                <h2
+                                    class="text-[10px] uppercase tracking-widest text-slate-400 font-bold flex items-center gap-1.5">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-slate-400 pending-dot"></span>
+                                    Menunggu
+                                </h2>
+                                <div class="text-[10px] text-slate-500 font-mono" id="countCctvPending">—</div>
+                            </div>
+                            <div id="gridCctvPending"
+                                class="flex-1 min-h-0 overflow-y-auto thin-scroll p-2 space-y-1.5">
+                                <div class="text-center py-6 text-slate-600 text-xs">Memuat...</div>
+                            </div>
+                        </div>
+
+                        <div
+                            class="flex flex-col min-h-[400px] md:min-h-0 bg-slate-900/30 border border-slate-800/60 rounded-2xl overflow-hidden">
+                            <div
+                                class="shrink-0 px-3 py-2 border-b border-slate-800/60 flex justify-between items-center bg-purple-500/5">
+                                <h2
+                                    class="text-[10px] uppercase tracking-widest text-amber-400 font-bold flex items-center gap-1.5">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-amber-400 pulse-dot"></span>
+                                    Dikerjakan
+                                </h2>
+                                <div class="text-[10px] text-slate-500 font-mono" id="countCctvProgress">—</div>
+                            </div>
+                            <div id="gridCctvProgress"
+                                class="flex-1 min-h-0 overflow-y-auto thin-scroll p-2 space-y-1.5">
+                                <div class="text-center py-6 text-slate-600 text-xs">Memuat...</div>
+                            </div>
+                        </div>
+
+                        <div
+                            class="flex flex-col min-h-[400px] md:min-h-0 bg-slate-900/30 border border-slate-800/60 rounded-2xl overflow-hidden">
+                            <div
+                                class="shrink-0 px-3 py-2 border-b border-slate-800/60 flex justify-between items-center bg-purple-500/5">
+                                <h2
+                                    class="text-[10px] uppercase tracking-widest text-emerald-400 font-bold flex items-center gap-1.5">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                                    Selesai
+                                </h2>
+                                <div class="text-[10px] text-slate-500 font-mono" id="countCctvCompleted">—</div>
+                            </div>
+                            <div id="gridCctvCompleted"
+                                class="flex-1 min-h-0 overflow-y-auto thin-scroll p-2 space-y-1.5">
+                                <div class="text-center py-6 text-slate-600 text-xs">Memuat...</div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="helpdesk-group" class="contents">
+                        <div
+                            class="flex flex-col min-h-[400px] md:min-h-0 bg-slate-900/30 border border-slate-800/60 rounded-2xl overflow-hidden">
+                            <div
+                                class="shrink-0 px-3 py-2 border-b border-slate-800/60 flex justify-between items-center bg-teal-500/5">
+                                <h2
+                                    class="text-[10px] uppercase tracking-widest text-slate-400 font-bold flex items-center gap-1.5">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-slate-400 pending-dot"></span>
+                                    Menunggu
+                                </h2>
+                                <div class="text-[10px] text-slate-500 font-mono" id="countHdPending">—</div>
+                            </div>
+                            <div id="gridHdPending"
+                                class="flex-1 min-h-0 overflow-y-auto thin-scroll p-2 space-y-1.5">
+                                <div class="text-center py-6 text-slate-600 text-xs">Memuat...</div>
+                            </div>
+                        </div>
+
+                        <div
+                            class="flex flex-col min-h-[400px] md:min-h-0 bg-slate-900/30 border border-slate-800/60 rounded-2xl overflow-hidden">
+                            <div
+                                class="shrink-0 px-3 py-2 border-b border-slate-800/60 flex justify-between items-center bg-teal-500/5">
+                                <h2
+                                    class="text-[10px] uppercase tracking-widest text-amber-400 font-bold flex items-center gap-1.5">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-amber-400 pulse-dot"></span>
+                                    Dikerjakan
+                                </h2>
+                                <div class="text-[10px] text-slate-500 font-mono" id="countHdProgress">—</div>
+                            </div>
+                            <div id="gridHdProgress"
+                                class="flex-1 min-h-0 overflow-y-auto thin-scroll p-2 space-y-1.5">
+                                <div class="text-center py-6 text-slate-600 text-xs">Memuat...</div>
+                            </div>
+                        </div>
+
+                        <div
+                            class="flex flex-col min-h-[400px] md:min-h-0 bg-slate-900/30 border border-slate-800/60 rounded-2xl overflow-hidden">
+                            <div
+                                class="shrink-0 px-3 py-2 border-b border-slate-800/60 flex justify-between items-center bg-teal-500/5">
+                                <h2
+                                    class="text-[10px] uppercase tracking-widest text-emerald-400 font-bold flex items-center gap-1.5">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                                    Selesai
+                                </h2>
+                                <div class="text-[10px] text-slate-500 font-mono" id="countHdCompleted">—</div>
+                            </div>
+                            <div id="gridHdCompleted"
+                                class="flex-1 min-h-0 overflow-y-auto thin-scroll p-2 space-y-1.5">
+                                <div class="text-center py-6 text-slate-600 text-xs">Memuat...</div>
+                            </div>
+                        </div>
+                    </section>
                 </div>
             </div>
-        </div>
-    </section>
-
-    {{-- ==================== MAIN: GRID 6 KOLOM ==================== --}}
-    <main class="flex-1 min-h-0 px-6 pb-3 overflow-hidden">
-
-        <div id="mainGrid" class="h-full grid gap-3" style="grid-template-columns: repeat(6, minmax(0, 1fr));">
-
-            <section id="cctv-group" class="contents">
-                <div
-                    class="flex flex-col min-h-0 bg-slate-900/30 border border-slate-800/60 rounded-2xl overflow-hidden">
-                    <div
-                        class="shrink-0 px-3 py-2 border-b border-slate-800/60 flex justify-between items-center bg-purple-500/5">
-                        <h2
-                            class="text-[10px] uppercase tracking-widest text-slate-400 font-bold flex items-center gap-1.5">
-                            <span class="w-1.5 h-1.5 rounded-full bg-slate-400 pending-dot"></span>
-                            Menunggu
-                        </h2>
-                        <div class="text-[10px] text-slate-500 font-mono" id="countCctvPending">—</div>
-                    </div>
-                    <div id="gridCctvPending" class="flex-1 min-h-0 overflow-y-auto thin-scroll p-2 space-y-1.5">
-                        <div class="text-center py-6 text-slate-600 text-xs">Memuat...</div>
-                    </div>
-                </div>
-
-                <div
-                    class="flex flex-col min-h-0 bg-slate-900/30 border border-slate-800/60 rounded-2xl overflow-hidden">
-                    <div
-                        class="shrink-0 px-3 py-2 border-b border-slate-800/60 flex justify-between items-center bg-purple-500/5">
-                        <h2
-                            class="text-[10px] uppercase tracking-widest text-amber-400 font-bold flex items-center gap-1.5">
-                            <span class="w-1.5 h-1.5 rounded-full bg-amber-400 pulse-dot"></span>
-                            Dikerjakan
-                        </h2>
-                        <div class="text-[10px] text-slate-500 font-mono" id="countCctvProgress">—</div>
-                    </div>
-                    <div id="gridCctvProgress" class="flex-1 min-h-0 overflow-y-auto thin-scroll p-2 space-y-1.5">
-                        <div class="text-center py-6 text-slate-600 text-xs">Memuat...</div>
-                    </div>
-                </div>
-
-                <div
-                    class="flex flex-col min-h-0 bg-slate-900/30 border border-slate-800/60 rounded-2xl overflow-hidden">
-                    <div
-                        class="shrink-0 px-3 py-2 border-b border-slate-800/60 flex justify-between items-center bg-purple-500/5">
-                        <h2
-                            class="text-[10px] uppercase tracking-widest text-emerald-400 font-bold flex items-center gap-1.5">
-                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                            Selesai
-                        </h2>
-                        <div class="text-[10px] text-slate-500 font-mono" id="countCctvCompleted">—</div>
-                    </div>
-                    <div id="gridCctvCompleted" class="flex-1 min-h-0 overflow-y-auto thin-scroll p-2 space-y-1.5">
-                        <div class="text-center py-6 text-slate-600 text-xs">Memuat...</div>
-                    </div>
-                </div>
-            </section>
-
-            <section id="helpdesk-group" class="contents">
-                <div
-                    class="flex flex-col min-h-0 bg-slate-900/30 border border-slate-800/60 rounded-2xl overflow-hidden">
-                    <div
-                        class="shrink-0 px-3 py-2 border-b border-slate-800/60 flex justify-between items-center bg-teal-500/5">
-                        <h2
-                            class="text-[10px] uppercase tracking-widest text-slate-400 font-bold flex items-center gap-1.5">
-                            <span class="w-1.5 h-1.5 rounded-full bg-slate-400 pending-dot"></span>
-                            Menunggu
-                        </h2>
-                        <div class="text-[10px] text-slate-500 font-mono" id="countHdPending">—</div>
-                    </div>
-                    <div id="gridHdPending" class="flex-1 min-h-0 overflow-y-auto thin-scroll p-2 space-y-1.5">
-                        <div class="text-center py-6 text-slate-600 text-xs">Memuat...</div>
-                    </div>
-                </div>
-
-                <div
-                    class="flex flex-col min-h-0 bg-slate-900/30 border border-slate-800/60 rounded-2xl overflow-hidden">
-                    <div
-                        class="shrink-0 px-3 py-2 border-b border-slate-800/60 flex justify-between items-center bg-teal-500/5">
-                        <h2
-                            class="text-[10px] uppercase tracking-widest text-amber-400 font-bold flex items-center gap-1.5">
-                            <span class="w-1.5 h-1.5 rounded-full bg-amber-400 pulse-dot"></span>
-                            Dikerjakan
-                        </h2>
-                        <div class="text-[10px] text-slate-500 font-mono" id="countHdProgress">—</div>
-                    </div>
-                    <div id="gridHdProgress" class="flex-1 min-h-0 overflow-y-auto thin-scroll p-2 space-y-1.5">
-                        <div class="text-center py-6 text-slate-600 text-xs">Memuat...</div>
-                    </div>
-                </div>
-
-                <div
-                    class="flex flex-col min-h-0 bg-slate-900/30 border border-slate-800/60 rounded-2xl overflow-hidden">
-                    <div
-                        class="shrink-0 px-3 py-2 border-b border-slate-800/60 flex justify-between items-center bg-teal-500/5">
-                        <h2
-                            class="text-[10px] uppercase tracking-widest text-emerald-400 font-bold flex items-center gap-1.5">
-                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                            Selesai
-                        </h2>
-                        <div class="text-[10px] text-slate-500 font-mono" id="countHdCompleted">—</div>
-                    </div>
-                    <div id="gridHdCompleted" class="flex-1 min-h-0 overflow-y-auto thin-scroll p-2 space-y-1.5">
-                        <div class="text-center py-6 text-slate-600 text-xs">Memuat...</div>
-                    </div>
-                </div>
-            </section>
-        </div>
-
-    </main>
+        </main>
+    </div>
 
     <footer
-        class="shrink-0 px-6 py-2 border-t border-slate-800/60 bg-slate-900/60 backdrop-blur-sm
+        class="shrink-0 px-4 md:px-6 py-2 border-t border-slate-800/60 bg-slate-900/60 backdrop-blur-sm
                    flex justify-between text-[11px] text-slate-500">
         <div class="flex items-center gap-2">
             <span class="w-1.5 h-1.5 rounded-full bg-indigo-500 pulse-dot"></span>
@@ -553,24 +574,24 @@
                 if (isActive) {
                     if (division === 'cctv') {
                         btn.className =
-                            'divfilter-btn px-3 py-1.5 rounded-lg text-[11px] font-semibold bg-purple-500 text-white transition shadow-lg shadow-purple-500/30';
+                            'divfilter-btn px-3 py-1.5 rounded-lg text-[11px] font-semibold bg-purple-500 text-white transition shadow-lg shadow-purple-500/30 whitespace-nowrap';
                     } else if (division === 'helpdesk') {
                         btn.className =
-                            'divfilter-btn px-3 py-1.5 rounded-lg text-[11px] font-semibold bg-teal-500 text-white transition shadow-lg shadow-teal-500/30';
+                            'divfilter-btn px-3 py-1.5 rounded-lg text-[11px] font-semibold bg-teal-500 text-white transition shadow-lg shadow-teal-500/30 whitespace-nowrap';
                     } else {
                         btn.className =
-                            'divfilter-btn px-3 py-1.5 rounded-lg text-[11px] font-semibold bg-slate-600 text-white transition';
+                            'divfilter-btn px-3 py-1.5 rounded-lg text-[11px] font-semibold bg-slate-600 text-white transition whitespace-nowrap';
                     }
                 } else {
                     if (btn.dataset.divfilter === 'cctv') {
                         btn.className =
-                            'divfilter-btn px-3 py-1.5 rounded-lg text-[11px] font-semibold text-purple-300 hover:bg-purple-500/20 border border-purple-500/40 transition';
+                            'divfilter-btn px-3 py-1.5 rounded-lg text-[11px] font-semibold text-purple-300 hover:bg-purple-500/20 border border-purple-500/40 transition whitespace-nowrap';
                     } else if (btn.dataset.divfilter === 'helpdesk') {
                         btn.className =
-                            'divfilter-btn px-3 py-1.5 rounded-lg text-[11px] font-semibold text-teal-300 hover:bg-teal-500/20 border border-teal-500/40 transition';
+                            'divfilter-btn px-3 py-1.5 rounded-lg text-[11px] font-semibold text-teal-300 hover:bg-teal-500/20 border border-teal-500/40 transition whitespace-nowrap';
                     } else {
                         btn.className =
-                            'divfilter-btn px-3 py-1.5 rounded-lg text-[11px] font-semibold text-slate-300 hover:bg-slate-700/60 border border-slate-600 transition';
+                            'divfilter-btn px-3 py-1.5 rounded-lg text-[11px] font-semibold text-slate-300 hover:bg-slate-700/60 border border-slate-600 transition whitespace-nowrap';
                     }
                 }
             });
@@ -583,14 +604,17 @@
                 cctvGroup.style.display = 'contents';
                 hdGroup.style.display = 'none';
                 mainGrid.style.gridTemplateColumns = 'repeat(3, minmax(0, 1fr))';
+                mainGrid.style.minWidth = '600px'; // Agar di HP tetap proporsional
             } else if (division === 'helpdesk') {
                 cctvGroup.style.display = 'none';
                 hdGroup.style.display = 'contents';
                 mainGrid.style.gridTemplateColumns = 'repeat(3, minmax(0, 1fr))';
+                mainGrid.style.minWidth = '600px';
             } else {
                 cctvGroup.style.display = 'contents';
                 hdGroup.style.display = 'contents';
                 mainGrid.style.gridTemplateColumns = 'repeat(6, minmax(0, 1fr))';
+                mainGrid.style.minWidth = '1200px';
             }
 
             if (lastData) {
@@ -606,10 +630,10 @@
             document.querySelectorAll('.range-btn').forEach(btn => {
                 if (btn.dataset.range === range) {
                     btn.className =
-                        'range-btn px-3 py-1.5 rounded-lg text-[11px] font-semibold bg-indigo-500 text-white transition';
+                        'range-btn px-3 py-1.5 rounded-lg text-[11px] font-semibold bg-indigo-500 text-white transition whitespace-nowrap';
                 } else {
                     btn.className =
-                        'range-btn px-3 py-1.5 rounded-lg text-[11px] font-semibold text-slate-300 hover:bg-slate-700/60 border border-slate-600 transition';
+                        'range-btn px-3 py-1.5 rounded-lg text-[11px] font-semibold text-slate-300 hover:bg-slate-700/60 border border-slate-600 transition whitespace-nowrap';
                 }
             });
 
@@ -657,13 +681,13 @@
 
             document.querySelectorAll('.range-btn').forEach(btn => {
                 btn.className =
-                    'range-btn px-3 py-1.5 rounded-lg text-[11px] font-semibold text-slate-300 hover:bg-slate-700/60 border border-slate-600 transition';
+                    'range-btn px-3 py-1.5 rounded-lg text-[11px] font-semibold text-slate-300 hover:bg-slate-700/60 border border-slate-600 transition whitespace-nowrap';
             });
 
             const customBtn = document.querySelector('#customRangeWrapper .range-btn');
             if (customBtn) {
                 customBtn.className =
-                    'range-btn px-3 py-1.5 rounded-lg text-[11px] font-semibold bg-indigo-500 text-white transition flex items-center gap-1';
+                    'range-btn px-3 py-1.5 rounded-lg text-[11px] font-semibold bg-indigo-500 text-white transition flex items-center gap-1 whitespace-nowrap';
             }
 
             const label = document.getElementById('customRangeLabel');
@@ -703,8 +727,10 @@
                 month: 'long',
                 year: 'numeric'
             });
-            document.getElementById('clock').textContent = time;
-            document.getElementById('date').textContent = date;
+            const clockEl = document.getElementById('clock');
+            const dateEl = document.getElementById('date');
+            if (clockEl) clockEl.textContent = time;
+            if (dateEl) dateEl.textContent = date;
         }
         setInterval(updateClock, 1000);
         updateClock();
@@ -1146,14 +1172,14 @@
             <div class="flex items-center justify-between gap-2 text-[9px] text-slate-500">
                 <div class="flex items-center gap-1.5 min-w-0">
                     ${(j.building || j.location) ? `
-                                            <span class="inline-flex items-center gap-0.5 truncate max-w-[80px]"
-                                                  title="${j.building ? j.building + ' — ' : ''}${j.location || ''}">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-2 w-2 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                                </svg>
-                                                ${j.building ? j.building + ' — ' : ''}${j.location || ''}
-                                            </span>
-                                        ` : ''}
+                                                <span class="inline-flex items-center gap-0.5 truncate max-w-[80px]"
+                                                      title="${j.building ? j.building + ' — ' : ''}${j.location || ''}">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-2 w-2 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                                    </svg>
+                                                    ${j.building ? j.building + ' — ' : ''}${j.location || ''}
+                                                </span>
+                                            ` : ''}
                     <span class="inline-flex items-center gap-0.5 shrink-0" title="${formatFullDate(j.created_at)}">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-2 w-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -1168,14 +1194,14 @@
             ${progressBar}
 
             ${j.completed_at ? `
-                                    <div class="text-[9px] text-emerald-500 flex items-center gap-0.5 mt-0.5"
-                                         title="${formatFullDate(j.completed_at)}">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-2 w-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                        </svg>
-                                        ${formatRelativeTime(j.completed_at)}
-                                    </div>
-                                ` : ''}
+                                        <div class="text-[9px] text-emerald-500 flex items-center gap-0.5 mt-0.5"
+                                             title="${formatFullDate(j.completed_at)}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-2 w-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            ${formatRelativeTime(j.completed_at)}
+                                        </div>
+                                    ` : ''}
         </div>
     `;
         }
