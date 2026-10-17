@@ -67,13 +67,13 @@ return [
     'icons' => [
         [
             'disk' => env('PWA_ICON_DISK', null),
-            'path' => env('PWA_ICON_MOBILE_PATH', '/storage/images/icons/icon-192x192.png'),
+            'path' => env('PWA_ICON_MOBILE_PATH', '/images/icons/icon-192x192.png'),
             'sizes' => env('PWA_ICON_MOBILE_SIZES', '192x192'),
             'type' => env('PWA_ICON_MOBILE_TYPE', 'image/png'),
         ],
         [
             'disk' => env('PWA_ICON_DISK', null),
-            'path' => env('PWA_ICON_DESKTOP_PATH', '/storage/images/icons/icon-512x512.png'),
+            'path' => env('PWA_ICON_DESKTOP_PATH', '/images/icons/icon-512x512.png'),
             'sizes' => env('PWA_ICON_DESKTOP_SIZES', '512x512'),
             'type' => env('PWA_ICON_DESKTOP_TYPE', 'image/png'),
         ],
