@@ -85,7 +85,7 @@ return [
     |--------------------------------------------------------------------------
     */
 
-    'apple_touch_icon' => env('PWA_APPLE_TOUCH_ICON', '/storage/images/icons/apple-touch-icon.png'),
+    'apple_touch_icon' => env('PWA_APPLE_TOUCH_ICON', '/images/icons/apple-touch-icon.png'),
 
     /*
     |--------------------------------------------------------------------------
