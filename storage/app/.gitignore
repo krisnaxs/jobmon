@@ -2,3 +2,8 @@
 !private/
 !public/
 !.gitignore
+
+# Izinkan folder images dan isinya
+!public/images/
+!public/images/icons/
+!public/images/icons/*
