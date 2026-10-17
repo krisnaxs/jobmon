@@ -57,7 +57,7 @@
                     <input type="text" name="username" value="{{ old('username') }}"
                         class="w-full border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm
                                   focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
-                        placeholder="admin / budi / agus" required autofocus>
+                        placeholder="username" required autofocus>
                 </div>
 
                 <div>
