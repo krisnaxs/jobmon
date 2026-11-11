@@ -140,21 +140,30 @@
     {{-- ==================== GLOBAL SCRIPTS ==================== --}}
     <script>
         window.CSRF_TOKEN = document.querySelector('meta[name="csrf-token"]').content;
+
         window.api = {
+            /**
+             * Request inti. Semua method (get/post/put/patch/delete) lewat sini.
+             * - credentials: 'same-origin' → cookie sesi Laravel SELALU ikut
+             * - redirect: 'manual'         → redirect ke /login terdeteksi, tidak diam-diam jadi HTML
+             * - Accept & X-Requested-With  → Laravel balas JSON (401), bukan redirect HTML
+             */
             async _request(method, url, body = null) {
                 const headers = {
                     'X-CSRF-TOKEN': window.CSRF_TOKEN,
                     'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
                 };
 
                 const opts = {
                     method,
                     headers,
+                    credentials: 'same-origin',
+                    redirect: 'manual',
                 };
 
                 if (body !== null) {
                     const isFormData = body instanceof FormData;
-
                     if (isFormData) {
                         opts.body = body;
                     } else {
@@ -163,24 +172,67 @@
                     }
                 }
 
-                const res = await fetch(url, opts);
+                let res;
+                try {
+                    res = await fetch(url, opts);
+                } catch (networkErr) {
+                    throw new Error('Koneksi gagal: ' + networkErr.message);
+                }
+
+                // --- Deteksi sesi habis / belum login ---
+                // redirect: 'manual' → redirect muncul sebagai opaqueredirect (status 0)
+                if (res.type === 'opaqueredirect' || res.status === 0) {
+                    window.location.href = '/login';
+                    throw new Error('Sesi berakhir, silakan login ulang.');
+                }
+
+                // Sebagian browser tetap melaporkan 3xx walau redirect: 'manual'
+                if (res.status >= 300 && res.status < 400) {
+                    window.location.href = '/login';
+                    throw new Error('Sesi berakhir, silakan login ulang.');
+                }
+
+                if (res.status === 401) {
+                    window.location.href = '/login';
+                    throw new Error('Sesi berakhir, silakan login ulang.');
+                }
 
                 if (!res.ok) {
-                    const err = await res.json().catch(() => ({}));
-                    let msg = err.message || 'Request gagal: ' + res.status;
+                    // Coba baca JSON error dari Laravel
+                    const contentType = res.headers.get('content-type') || '';
+                    let msg = 'Request gagal: ' + res.status;
 
-                    if (err.errors) {
-                        const details = Object.entries(err.errors)
-                            .map(([field, msgs]) => `${field}: ${Array.isArray(msgs) ? msgs.join(', ') : msgs}`)
-                            .join(' | ');
-                        if (details) msg = details;
+                    if (contentType.includes('application/json')) {
+                        const err = await res.json().catch(() => ({}));
+                        msg = err.message || msg;
+
+                        if (err.errors) {
+                            const details = Object.entries(err.errors)
+                                .map(([field, msgs]) =>
+                                    `${field}: ${Array.isArray(msgs) ? msgs.join(', ') : msgs}`)
+                                .join(' | ');
+                            if (details) msg = details;
+                        }
+                    } else {
+                        // Server membalas HTML (error page / redirect yang tidak terdeteksi)
+                        const text = await res.text().catch(() => '');
+                        const match = text.match(/<title>(.*?)<\/title>/i);
+                        if (match) msg = match[1].trim();
                     }
 
                     throw new Error(msg);
                 }
+
                 if (res.status === 204) return {};
 
-                return res.json().catch(() => ({}));
+                const contentType = res.headers.get('content-type') || '';
+                if (contentType.includes('application/json')) {
+                    return res.json().catch(() => ({}));
+                }
+
+                // Kalau bukan JSON (mis. HTML login) → anggap sesi bermasalah
+                window.location.href = '/login';
+                throw new Error('Respons bukan JSON. Sesi mungkin berakhir.');
             },
 
             post(url, body = {}) {
@@ -199,16 +251,11 @@
                 return this._request('DELETE', url, body);
             },
 
-            async get(url) {
-                const res = await fetch(url, {
-                    headers: {
-                        'Accept': 'application/json'
-                    }
-                });
-                if (!res.ok) throw new Error('Request gagal: ' + res.status);
-                return res.json();
-            }
+            get(url) {
+                return this._request('GET', url);
+            },
         };
+
         window.showToast = function(message, type = 'success', duration = 3500) {
             const container = document.getElementById('toast-container');
             if (!container) return;
@@ -271,6 +318,7 @@
             toast.classList.add('toast-leave');
             setTimeout(() => toast.remove(), 200);
         }
+
         window.showConfirm = function(options = {}) {
             return new Promise((resolve) => {
                 const {
@@ -364,6 +412,7 @@
                 document.addEventListener('keydown', onEsc);
             });
         };
+
         document.querySelectorAll('[data-auto-submit]').forEach(el => {
             el.addEventListener('change', () => el.closest('form').submit());
         });
