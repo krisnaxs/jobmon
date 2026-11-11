@@ -373,12 +373,12 @@
         <div class="flex items-center gap-1.5" title="${participating.map(t => t.name).join(', ')}${skippedCount > 0 ? ' | Skip: ' + skipped.map(t => t.name).join(', ') : ''}">
             <div class="flex -space-x-1.5 shrink-0">
                 ${participating.slice(0, 3).map(t => `
-                                                                        <div class="w-5 h-5 rounded-full bg-gradient-to-br from-indigo-500 to-violet-600
-                                                                                    flex items-center justify-center text-white font-bold text-[9px]
-                                                                                    ring-2 ring-white">
-                                                                            ${t.name.charAt(0).toUpperCase()}
-                                                                        </div>
-                                                                    `).join('')}
+                                                                                <div class="w-5 h-5 rounded-full bg-gradient-to-br from-indigo-500 to-violet-600
+                                                                                            flex items-center justify-center text-white font-bold text-[9px]
+                                                                                            ring-2 ring-white">
+                                                                                    ${t.name.charAt(0).toUpperCase()}
+                                                                                </div>
+                                                                            `).join('')}
             </div>
             <span class="text-gray-700 font-medium">${participating.length} teknisi</span>
             ${skipMiniBadge}
@@ -422,11 +422,11 @@
             return `
                 <div class="flex flex-wrap gap-1">
                     ${teamNames.map(name => `
-                                                                    <span class="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wide
-                                                                                 px-1.5 py-0.5 rounded border ${cls}">
-                                                                        ${name}
-                                                                    </span>
-                                                                `).join('')}
+                                                                            <span class="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wide
+                                                                                         px-1.5 py-0.5 rounded border ${cls}">
+                                                                                ${name}
+                                                                            </span>
+                                                                        `).join('')}
                 </div>
             `;
         }
@@ -615,11 +615,11 @@
             <div class="text-2xl font-bold text-emerald-600">${completed}</div>
         </div>
         ${!IS_ADMIN && skipCount > 0 ? `
-                                                                            <div class="bg-white rounded-lg shadow-sm border-l-4 border-rose-500 p-4">
-                                                                                <div class="text-xs text-rose-500 uppercase font-semibold">⊘ Skip</div>
-                                                                                <div class="text-2xl font-bold text-rose-600">${skipCount}</div>
-                                                                            </div>
-                                                                        ` : ''}
+                                                                                    <div class="bg-white rounded-lg shadow-sm border-l-4 border-rose-500 p-4">
+                                                                                        <div class="text-xs text-rose-500 uppercase font-semibold">⊘ Skip</div>
+                                                                                        <div class="text-2xl font-bold text-rose-600">${skipCount}</div>
+                                                                                    </div>
+                                                                                ` : ''}
     `;
         }
 
@@ -784,10 +784,10 @@
                                 ${esc(w.title)}
                             </div>
                             ${w.description ? `
-                                                                                <div class="text-xs text-gray-500 line-clamp-1 mt-0.5">
-                                                                                    ${esc(w.description)}
-                                                                                </div>
-                                                                            ` : ''}
+                                                                                        <div class="text-xs text-gray-500 line-clamp-1 mt-0.5">
+                                                                                            ${esc(w.description)}
+                                                                                        </div>
+                                                                                    ` : ''}
                         </td>
 
                         {{-- Divisi --}}
@@ -819,19 +819,19 @@
                         {{-- Dibuat --}}
                         <td class="px-3 py-2.5 text-xs">
                             ${w.created_at ? `
-                                                                                <span class="text-gray-700">
-                                                                                    ${new Date(w.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
-                                                                                </span>
-                                                                            ` : `<span class="text-gray-400 italic">-</span>`}
+                                                                                        <span class="text-gray-700">
+                                                                                            ${new Date(w.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
+                                                                                        </span>
+                                                                                    ` : `<span class="text-gray-400 italic">-</span>`}
                         </td>
 
                         {{-- Deadline --}}
                         <td class="px-3 py-2.5 text-xs">
                             ${w.deadline_at ? `
-                                                                                <span class="text-gray-700">
-                                                                                    ${new Date(w.deadline_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
-                                                                                </span>
-                                                                            ` : `<span class="text-gray-400 italic">-</span>`}
+                                                                                        <span class="text-gray-700">
+                                                                                            ${new Date(w.deadline_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
+                                                                                        </span>
+                                                                                    ` : `<span class="text-gray-400 italic">-</span>`}
                         </td>
 
                         {{-- Aksi --}}
@@ -867,7 +867,34 @@
         function goFinish(id) {
             window.location.href = `/work-orders/${id}`;
         }
+        let refreshTimer = null;
+
+        async function loadWorkOrders() {
+            try {
+                const url = IS_ADMIN ?
+                    "{{ route('admin.wo.data') }}" :
+                    "{{ route('technician.wo.data') }}";
+
+                allWorkOrders = await api.get(url);
+                renderStats();
+                renderTable();
+            } catch (err) {
+                console.error('WO error:', err);
+
+                if (err.message.includes('Sesi berakhir') ||
+                    err.message.includes('bukan JSON')) {
+                    if (refreshTimer) clearInterval(refreshTimer);
+                    return;
+                }
+
+                document.getElementById('woTableBody').innerHTML = `
+            <tr><td colspan="12" class="px-3 py-10 text-center text-red-500 text-sm">
+                Gagal memuat data: ${err.message}
+            </td></tr>`;
+            }
+        }
+
         loadWorkOrders();
-        setInterval(loadWorkOrders, 5000);
+        refreshTimer = setInterval(loadWorkOrders, 5000);
     </script>
 @endpush
